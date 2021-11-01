@@ -2,7 +2,8 @@
  * Afleveringsopgave 7
  * 01-11-2021
  * by Andrzej Piotr Dudko, adudko21@student.aau.dk, SW1
- * A program that find the area under a curve with trapezoids
+ * A program that approximates the area under a curve by making n trapezoids
+ * under the curve
  */
 #include <stdio.h>
 #include <stdlib.h>
