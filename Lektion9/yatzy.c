@@ -10,16 +10,12 @@ void roll_dice(int dice_count, int dice[]);
 int main(void) {
   srand(time(NULL));  // Seeding the random number generator.
                       // Do this only once!
-  int i, dice_count, loop, throws;
+  int i, dice_count, loop;
 
-  printf("How many dice to roll?\n");
   scanf(" %d", &dice_count);
   int dice[dice_count]; // creates an array containing 'dice_count' ammount of values
 
-  printf("Ammount of times you want to trow the dice\n");
-  scanf(" %d", &throws);
-
-  for (loop = 0 ; loop < throws; loop++) { // all dice get thrown 'throws' times
+  for (loop = 0 ; loop < 10; loop++) { // all dice get thrown 10 times
     roll_dice(dice_count, dice);
   }
 
