@@ -1,3 +1,9 @@
+/*
+ * Eksamensopgave 2
+ * by Andrzej Piotr Dudko, adudko21@student.aau.dk, SW1
+ * A program that plays yatzy with a user input ammount of dice
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -14,10 +20,7 @@ int main(void) {
 
   scanf(" %d", &dice_count);
   int dice[dice_count]; // creates an array containing 'dice_count' ammount of values
-
-  for (loop = 0 ; loop < 10; loop++) { // all dice get thrown 10 times
-    roll_dice(dice_count, dice);
-  }
+  roll_dice(dice_count, dice);
 
   return 0;
 }
