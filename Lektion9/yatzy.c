@@ -17,6 +17,7 @@ void roll_dice(int dice_count, int dice[]);
 void upper_section(int eyes, int dice_count, int dice[], int points[]);
 
 void one_pair(int dice_count, int dice[], int counter[], int points[]);
+void two_pair(int dice_count, int dice[], int counter[], int points[]);
 
 int sort_ascend(const void *ip1, const void *ip2);
 int sort_descend(const void *ip1, const void *ip2);
@@ -58,6 +59,8 @@ int main(void) {
   one_pair(dice_count, dice, counter, points);
   printf("Score for one pair: %d\n", points[6]);
   //printf("you rolled %d 4's\n", counter[3]);
+  two_pair(dice_count, dice, counter, points);
+  printf("Score for two pairs: %d\n", points[7]);
 
 
 
@@ -119,6 +122,23 @@ void one_pair(int dice_count, int dice[], int counter[], int points[]) {
     points[6] = 2;
   } else {
     points[6] = 0;
+  }
+}
+
+void two_pair(int dice_count, int dice[], int counter[], int points[]) {
+  dice_counter(dice_count, dice, counter);
+  int loop, loop2;
+  for (loop = 5; loop > -1; loop--) {
+    for (loop2 = 4; loop > -1; loop--) {
+      if (counter[loop] > 1 && counter[loop2] > 1 && loop != loop2 && dice_count - counter[loop] - counter[loop2] > 0) {
+        points[7] = (loop+loop2+2)*2;
+        printf("%d, %d\n", loop, loop2);
+        loop = 0;
+        loop2 = 0;
+      } else {
+        points[7] = 0;
+      }
+    }
   }
 }
 
