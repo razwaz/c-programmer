@@ -135,7 +135,11 @@ void roll_dice(int dice_count, int dice[]){ // dice_count = ammount dice thrown,
   int loop;
   for (loop = 0; loop < dice_count; loop++) {
     dice[loop] = (rand() % DIE_MAX_EYES) + 1;
-    printf("%d, ", dice[loop]);
+    if (loop == dice_count-1) {   // condition so that the last dice wont have a comma after it
+      printf("%d", dice[dice_count-1]);
+    } else {
+      printf("%d, ", dice[loop]);
+    }
   }
   printf("\n");
 }
