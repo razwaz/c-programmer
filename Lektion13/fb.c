@@ -3,6 +3,7 @@
 #include <string.h>
 
 #define MATCHES 132
+#define TEAMS 12
 
 enum teamNames {AaB, ACH, AGF, BIF, FCK, FCM, FCN, LBK, OB, RFC, SDR, VB};
 
@@ -33,10 +34,8 @@ void teamAwaySum (struct match match[], struct team team[], int name, int i);
 
 int main(void) {
   match match[MATCHES];
-  team team[12];
-
+  team team[TEAMS];
   FILE *input_file_pointer;
-
   int j = 0;
   int i = 0;
   char line[60];
@@ -92,18 +91,6 @@ int main(void) {
         }
         match[j].spectators = atoi(spectatorNr);
       }
-      /* print for debugging
-      printf("Match %d --------------------------------\n", j+1);
-      printf("Weekday: %s \n", match[j].weekday);
-      printf("date: %s \n", match[j].date);
-      printf("time: %s \n", match[j].time);
-      printf("home team: %s \n", match[j].homeTeam);
-      printf("away team: %s \n", match[j].awayTeam);
-      printf("home score: %d \n", match[j].homeScore);
-      printf("away score: %d \n", match[j].awayScore);
-      printf("spectators: %d \n", match[j].spectators);
-      */
-
     }
     fclose(input_file_pointer);
   } else {
@@ -120,7 +107,7 @@ int main(void) {
 
 void results (struct team team[]) {
   int i;
-  for (i = 0; i < 12; i++) {
+  for (i = 0; i < TEAMS; i++) {
     if (strcmp(team[i].teamName, "OB") == 0 || strcmp(team[i].teamName, "VB") == 0) {
       printf("%s      %d     %d     %d\n", team[i].teamName, team[i].points, team[i].goalsFor, team[i].goalsAgainst);
     } else {
@@ -133,8 +120,8 @@ void teamRanking (struct team team[]) {
   int i, j;
   struct team temp;
 
-  for (i = 0; i < 12; i++) {
-    for (j = 0; j < (12 - 1 - i); j++) {
+  for (i = 0; i < TEAMS; i++) {
+    for (j = 0; j < (TEAMS - 1 - i); j++) {
       if (team[j].points == team[j+1].points) {
         if (team[j].goalsFor - team[j].goalsAgainst < team[j+1].goalsFor - team[j+1].goalsAgainst) {
           temp = team[j];
@@ -151,65 +138,20 @@ void teamRanking (struct team team[]) {
 }
 
 void teamsSum (struct match match[], struct team team[]) {
-  int i;
+  int i,j;
   setupTeams(team);
 
   for (i = 0; i < MATCHES; i++) {
-    // Point calculation for home teams
-    if (strcmp(match[i].homeTeam, "AaB") == 0) {
-      teamHomeSum(match, team, AaB, i);
-    } else if (strcmp(match[i].homeTeam, "ACH") == 0) {
-      teamHomeSum(match, team, ACH, i);
-    }else if (strcmp(match[i].homeTeam, "AGF") == 0) {
-      teamHomeSum(match, team, AGF, i);
-    }else if (strcmp(match[i].homeTeam, "BIF") == 0) {
-      teamHomeSum(match, team, BIF, i);
-    }else if (strcmp(match[i].homeTeam, "FCK") == 0) {
-      teamHomeSum(match, team, FCK, i);
-    }else if (strcmp(match[i].homeTeam, "FCM") == 0) {
-      teamHomeSum(match, team, FCM, i);
-    }else if (strcmp(match[i].homeTeam, "FCN") == 0) {
-      teamHomeSum(match, team, FCN, i);
-    }else if (strcmp(match[i].homeTeam, "LBK") == 0) {
-      teamHomeSum(match, team, LBK, i);
-    }else if (strcmp(match[i].homeTeam, "OB") == 0) {
-      teamHomeSum(match, team, OB, i);
-    }else if (strcmp(match[i].homeTeam, "RFC") == 0) {
-      teamHomeSum(match, team, RFC, i);
-    }else if (strcmp(match[i].homeTeam, "SDR") == 0) {
-      teamHomeSum(match, team, SDR, i);
-    }else if (strcmp(match[i].homeTeam, "VB") == 0) {
-      teamHomeSum(match, team, VB, i);
-    }
-    // Point calculation for away teams
-    if (strcmp(match[i].awayTeam, "AaB") == 0) {
-      teamAwaySum(match, team, AaB, i);
-    } else if (strcmp(match[i].awayTeam, "ACH") == 0) {
-      teamAwaySum(match, team, ACH, i);
-    }else if (strcmp(match[i].awayTeam, "AGF") == 0) {
-      teamAwaySum(match, team, AGF, i);
-    }else if (strcmp(match[i].awayTeam, "BIF") == 0) {
-      teamAwaySum(match, team, BIF, i);
-    }else if (strcmp(match[i].awayTeam, "FCK") == 0) {
-      teamAwaySum(match, team, FCK, i);
-    }else if (strcmp(match[i].awayTeam, "FCM") == 0) {
-      teamAwaySum(match, team, FCM, i);
-    }else if (strcmp(match[i].awayTeam, "FCN") == 0) {
-      teamAwaySum(match, team, FCN, i);
-    }else if (strcmp(match[i].awayTeam, "LBK") == 0) {
-      teamAwaySum(match, team, LBK, i);
-    }else if (strcmp(match[i].awayTeam, "OB") == 0) {
-      teamAwaySum(match, team, OB, i);
-    }else if (strcmp(match[i].awayTeam, "RFC") == 0) {
-      teamAwaySum(match, team, RFC, i);
-    }else if (strcmp(match[i].awayTeam, "SDR") == 0) {
-      teamAwaySum(match, team, SDR, i);
-    }else if (strcmp(match[i].awayTeam, "VB") == 0) {
-      teamAwaySum(match, team, VB, i);
+    for (j = 0; j < TEAMS; j++) {
+      if (strcmp(match[i].homeTeam, team[j].teamName) == 0) {
+        teamHomeSum(match, team, j, i);
+      }
+      if (strcmp(match[i].awayTeam, team[j].teamName) == 0) {
+        teamAwaySum(match, team, j, i);
+      }
     }
   }
 }
-
 
 void setupTeams (struct team team[]) {
   int i;
@@ -227,12 +169,11 @@ void setupTeams (struct team team[]) {
   strcpy(team[SDR].teamName, "SDR");
   strcpy(team[VB].teamName, "VB");
 
-  for (i = AaB; i < VB; i++) {
+  for (i = AaB; i < TEAMS; i++) {
     team[i].points = 0;
     team[i].goalsFor = 0;
     team[i].goalsAgainst = 0;
   }
-
 }
 
 void teamHomeSum (struct match match[], struct team team[], int name, int i) {
