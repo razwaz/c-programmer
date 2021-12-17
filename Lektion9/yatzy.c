@@ -1,6 +1,6 @@
 /*
  * Eksamensopgave 2
- * 05-11-2021
+ * 17-12-2021
  * by Andrzej Piotr Dudko, adudko21@student.aau.dk, SW1
  * A program that plays yatzy with a user input ammount of dice
  */
@@ -26,7 +26,7 @@ void large_straight(int dice_count, int dice[], int counter[], int points[]);
 void full_house(int dice_count, int dice[], int counter[], int points[]);
 void chance(int dice_count, int dice[], int counter[], int points[]);
 void yatzy(int dice_count, int dice[], int counter[], int points[]);
-// function for q sort to sort my dice largest to lowest
+// function for q sort to sort the dice in descending order
 int sort_descend(const void *ip1, const void *ip2);
 // function that counts how many of each dice there is
 void dice_counter(int dice_count, int dice[], int counter[]);
@@ -37,11 +37,9 @@ void yatzy_program(int *dice_count, int counter[], int points[], int *score, int
 int main(void) {
   srand(time(NULL));  // Seeding the random number generator.
                       // Do this only once!
-  int dice_count = 0, rounds = 15, score = 0, loop;
+  int dice_count = 0, rounds = 15, score = 0, loop, bonus;
   int counter[6];
-  int one = 0, two = 0, three = 0, four = 0, five = 0, six = 0;
   int points[rounds]; // points array initialized to ammount of rounds
-  int bonus = 0;
   bool run = true;
   char keepPlaying;
 
@@ -66,7 +64,6 @@ void yatzy_program(int *dice_count, int counter[], int points[], int *score, int
   }
 }
 
-
 void score_board(int dice_count, int dice[], int counter[], int points[], int *score, int *bonus) {
   int loop;
   for (loop = 0; loop < 6; loop++) {
@@ -85,6 +82,7 @@ void score_board(int dice_count, int dice[], int counter[], int points[], int *s
     printf("You scored 63 or more in the upper section, here is 50 bonus points!\n"
            "--------------------------------------------------------------------------\n");
   } else {
+    *bonus = 0;
     printf("You didnt score 63 or more, no bonus points ):\n"
            "--------------------------------------------------------------------------\n");
   }
@@ -152,20 +150,20 @@ void input_dice (int *dice_count) {  // this function asks the user to input an 
   }
 }
 
-void upper_section(int eyes, int dice_count, int dice[], int points[]) {
+void upper_section(int eyes, int dice_count, int dice[], int points[]) { // runs the 'eyes' upper section
   points[eyes-1] = 0; // the -1 on eyes is because the first value in an array is adressed as points[0]
   int maxpoints = 0, loop;
   for (loop = 0; loop < dice_count; loop++) {
-    if (dice[loop] == eyes && maxpoints < 5) {
+    if (maxpoints > 4) {
+      loop = dice_count;
+    } else if (dice[loop] == eyes) {
       points[eyes-1] += eyes;
       maxpoints++;
-    } else if (maxpoints == 5) {
-      loop = dice_count;
     }
   }
 }
 
-void one_pair(int dice_count, int dice[], int counter[], int points[]) {
+void one_pair(int dice_count, int dice[], int counter[], int points[]) { // pair of dice, more than a pair = invalid
   dice_counter(dice_count, dice, counter);
   int loop;
   points[6] = 0;
@@ -178,7 +176,7 @@ void one_pair(int dice_count, int dice[], int counter[], int points[]) {
   }
 }
 
-void two_pair(int dice_count, int dice[], int counter[], int points[]) {
+void two_pair(int dice_count, int dice[], int counter[], int points[]) { // two different pairs
   dice_counter(dice_count, dice, counter);
   int loop_1, loop_2;
   points[7] = 0;
@@ -193,7 +191,7 @@ void two_pair(int dice_count, int dice[], int counter[], int points[]) {
   }
 }
 
-void three_of_kind(int dice_count, int dice[], int counter[], int points[]) {
+void three_of_kind(int dice_count, int dice[], int counter[], int points[]) { // only three of a kind less or more = invalid
   dice_counter(dice_count, dice, counter);
   int loop;
   points[8] = 0;
@@ -205,7 +203,7 @@ void three_of_kind(int dice_count, int dice[], int counter[], int points[]) {
   }
 }
 
-void four_of_kind(int dice_count, int dice[], int counter[], int points[]) {
+void four_of_kind(int dice_count, int dice[], int counter[], int points[]) { // only four of a kind less or more = invalid
   dice_counter(dice_count, dice, counter);
   int loop;
   points[9] = 0;
@@ -217,7 +215,7 @@ void four_of_kind(int dice_count, int dice[], int counter[], int points[]) {
   }
 }
 
-void small_straight(int dice_count, int dice[], int counter[], int points[]) {
+void small_straight(int dice_count, int dice[], int counter[], int points[]) { // need 1,2,3,4,5 dice
   dice_counter(dice_count, dice, counter);
   points[10] = 0;
   if (counter[4] > 0 && counter[3] > 0 && counter[2] > 0 && counter[1] > 0 && counter[0] > 0)  {
@@ -225,7 +223,7 @@ void small_straight(int dice_count, int dice[], int counter[], int points[]) {
   }
 }
 
-void large_straight(int dice_count, int dice[], int counter[], int points[]) {
+void large_straight(int dice_count, int dice[], int counter[], int points[]) { // need 2,3,4,5,6 dice
   dice_counter(dice_count, dice, counter);
   points[11] = 0;
   if (counter[5] > 0 && counter[4] > 0 && counter[3] > 0 && counter[2] > 0 && counter[1] > 0)  {
@@ -233,7 +231,7 @@ void large_straight(int dice_count, int dice[], int counter[], int points[]) {
   }
 }
 
-void full_house(int dice_count, int dice[], int counter[], int points[]) {
+void full_house(int dice_count, int dice[], int counter[], int points[]) { // a pair and three of a kind
   dice_counter(dice_count, dice, counter);
   int loop_1, loop_2;
   points[12] = 0;
@@ -250,7 +248,7 @@ void full_house(int dice_count, int dice[], int counter[], int points[]) {
   }
 }
 
-void chance(int dice_count, int dice[], int counter[], int points[])  {
+void chance(int dice_count, int dice[], int counter[], int points[])  { // 5 largest dice
   dice_counter(dice_count, dice, counter);
   qsort(dice, dice_count, sizeof(int), sort_descend);
   int loop;
@@ -260,7 +258,7 @@ void chance(int dice_count, int dice[], int counter[], int points[])  {
   }
 }
 
-void yatzy(int dice_count, int dice[], int counter[], int points[]) {
+void yatzy(int dice_count, int dice[], int counter[], int points[]) { // 5 dice with the same number
   dice_counter(dice_count, dice, counter);
   points[14] = 0;
   int loop;

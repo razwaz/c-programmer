@@ -1,3 +1,12 @@
+/*
+ * Eksamensopgave 3
+ * 17-12-2021
+ * by Andrzej Piotr Dudko, adudko21@student.aau.dk, SW1
+ * A program that sorts a textfile containing match data and returns
+ * a leaderboard with team names, points, goals for and goals agaist
+ * through standard output.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

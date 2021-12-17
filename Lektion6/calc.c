@@ -1,8 +1,9 @@
 /*
-* Eksamensopgave 1
-* by Andrzej Piotr Dudko, adudko21@student.aau.dk, SW1
-* A calculator program
-*/
+ * Eksamensopgave 1
+ * 17-12-2021
+ * by Andrzej Piotr Dudko, adudko21@student.aau.dk, SW1
+ * A calculator program
+ */
 
 #include <math.h>
 #include <stdlib.h>
@@ -48,6 +49,7 @@ void run_calculator (double *accumulator, double *operand, char *operator, bool 
 }
 
 void scan_data (char *operator, double *operand) {
+  printf("Enter operator, and an optional operand: ");
   *operand = 0;
   scanf(" %c", &*operator);
   if (unary(&*operator) == true) {
@@ -94,13 +96,13 @@ void print(double *accumulator, char *operator) {
   if (*operator == 'q') {
     printf(
     "----------------------------------------------\n"
-    "The final result is: %lf\n"
+    "Final result is: %lf\n"
     "----------------------------------------------\n"
     , *accumulator);
   } else {
     printf(
     "----------------------------------------------\n"
-    "The result so far is: %lf\n"
+    "Result so far is: %lf\n"
     "----------------------------------------------\n"
     , *accumulator);
   }
@@ -128,7 +130,11 @@ double divide(double *accumulator, double *operand) {
 }
 
 double power(double *accumulator, double *operand) {
+  if (*accumulator < 0) {
+    return -pow(*accumulator, *operand);
+  } else {
   return pow(*accumulator, *operand);
+  }
 }
 
 
